@@ -35,13 +35,26 @@ export const run = async () => {
         The user will provide input. The input will include the following: a command to display photos; which photos to display;
         under what conditions the photos should be displayed.
 
+        Example input: Display photos of either Sam or Joel from the years 1990 - 1992
+        For this input, the output should be as follows:
+            Command: Display photos
+            List: Sam || Joel
+            Conditions: Years 1990 - 1992
+            
+        Example input: Display photos of either Sam and Joel from the years 1990 - 1992
+        For this input, the output should be as follows:
+            Command: Display photos
+            List: Sam && Joel
+            Conditions: Years 1990 - 1992
+            
         Parse the input and respond with the following format:
-            Command: command here
-            List: the list of people whose photos should be displayed
-            Conditions: the conditions under which the photos should be selected.
-          
-            Display photos of either Sam or Joel from the years 1990 - 1992.
-              `;
+        Command: command here
+        List: the list of people whose photos should be displayed
+        Conditions: the conditions under which the photos should be selected.
+    
+        Display photos of Sam and Joel from the years 1990 - 1992.
+    `;
+    
     const res = await model.call(input);
     console.log({ res });
 };
