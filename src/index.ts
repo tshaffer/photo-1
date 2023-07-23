@@ -9,9 +9,6 @@ console.log(exampleName, ...args);
 let runExample;
 
 try {
-  console.log('dirName: ' + __dirname);
-  console.log('exampleName: ' + exampleName);
-  console.log(path.join(__dirname, exampleName));
   ({ run: runExample } = require(path.join(__dirname, exampleName)));
 } catch {
   throw new Error(`Could not load example ${exampleName}`);
