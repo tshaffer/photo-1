@@ -41,10 +41,22 @@ export const run = async () => {
             List: Sam || Joel
             Conditions: Years 1990 - 1992
             
-        Example input: Display photos of either Sam and Joel from the years 1990 - 1992
+        Example input: Display photos of both Sam and Joel from the years 1990 - 1992
         For this input, the output should be as follows:
             Command: Display photos
             List: Sam && Joel
+            Conditions: Years 1990 - 1992
+            
+        Example input: Display photos of both Sam and Joel but not Rachel from the years 1990 - 1992
+        For this input, the output should be as follows:
+            Command: Display photos
+            List: (Sam && Joel) && !Rachel
+            Conditions: Years 1990 - 1992
+            
+        Example input: Display photos of both Sam or Joel but not Rachel from the years 1990 - 1992
+        For this input, the output should be as follows:
+            Command: Display photos
+            List: (Sam || Joel) && !Rachel
             Conditions: Years 1990 - 1992
             
         Parse the input and respond with the following format:
@@ -52,7 +64,7 @@ export const run = async () => {
         List: the list of people whose photos should be displayed
         Conditions: the conditions under which the photos should be selected.
     
-        Display photos of Fred or Ethel from the year 1993.
+        Display photos of Fred or Ethel but not Barney from the year 1993.
     `;
     
     const res = await model.call(input);
