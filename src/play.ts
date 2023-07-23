@@ -52,7 +52,7 @@ export const run = async () => {
         List: the list of people whose photos should be displayed
         Conditions: the conditions under which the photos should be selected.
     
-        Display photos of Sam and Joel from the years 1990 - 1992.
+        Display photos of Fred or Ethel from the year 1993.
     `;
     
     const res = await model.call(input);
