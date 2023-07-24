@@ -1,9 +1,12 @@
 import { OpenAI } from "langchain/llms/openai";
-
+import connectDB from './config/db';
 import * as dotenv from "dotenv";
+
 dotenv.config();
 
 export const run = async () => {
+
+    await connectDB();
 
     const model = new OpenAI({ temperature: 0 });
 
