@@ -1,61 +1,22 @@
-import { Query } from 'mongoose';
+import { MediaItem } from '../types';
+import {
+  getMediaitemModel,
+} from '../models';
 
-import { GoogleMediaItem, DbMediaItem } from '../types';
-import Mediaitem from '../models/Mediaitem';
+export const getAllMediaItems = async (): Promise<MediaItem[]> => {
 
-export const upsertMediaItemInDb = async (dbMediaItem: DbMediaItem): Promise<any> => {
+  const mediaItemModel = getMediaitemModel();
 
-  const filter = {
-    id: dbMediaItem.id,
-  };
-  const update = {
-    $set: {
-      downloaded: true,
-      filePath: dbMediaItem.filePath
-    },
-  };
+  const records: MediaItem[] = [];
+  // const documents: any = await (mediaItemModel as any).find().limit(100).exec();
+  const documents: any = await (mediaItemModel as any).find().exec();
+  for (const document of documents) {
+    const mediaItem: MediaItem = document.toObject() as MediaItem;
+    mediaItem.googleId = document.googleId.toString();
+    records.push(mediaItem);
+  }
+  console.log('records');
+  console.log(records);
+  return records;
+}
 
-  const promise = Mediaitem.collection.findOneAndUpdate(
-    filter,
-    update,
-    {
-      upsert: true,
-    }
-  );
-
-  return promise;
-};
-
-export const addMediaItemToDb = (dbMediaItem: DbMediaItem): Promise<any> => {
-  return Mediaitem.collection.insertOne(dbMediaItem);
-};
-
-export const addMediaItemsToDb = (googleMediaItems: GoogleMediaItem[]): Promise<any> => {
-  const dbMediaItems: DbMediaItem[] = convertGoogleMediaItemsToDbMediaItems(googleMediaItems);
-  return Mediaitem.collection.insertMany(dbMediaItems);
-};
-
-const convertGoogleMediaItemsToDbMediaItems = (googleMediaItems: GoogleMediaItem[]): DbMediaItem[] => {
-  const dbMediaItems: DbMediaItem[] = [];
-  googleMediaItems.forEach((googleMediaItem: GoogleMediaItem) => {
-    const dbMediaItem: DbMediaItem = convertGoogleMediaItemToDbMediaItem(googleMediaItem);
-    dbMediaItems.push(dbMediaItem);
-  });
-  return dbMediaItems;
-};
-
-export const convertGoogleMediaItemToDbMediaItem = (googleMediaItem: GoogleMediaItem): DbMediaItem => {
-  const dbMediaItem: DbMediaItem = {
-    id: googleMediaItem.id,
-    baseUrl: googleMediaItem.baseUrl,
-    fileName: googleMediaItem.filename,
-    downloaded: false,
-    filePath: '',
-    productUrl: googleMediaItem.productUrl,
-    mimeType: googleMediaItem.mimeType,
-    creationTime: googleMediaItem.mediaMetadata.creationTime,
-    width: Number(googleMediaItem.mediaMetadata.width),
-    height: Number(googleMediaItem.mediaMetadata.height),
-  };
-  return dbMediaItem;
-};
