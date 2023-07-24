@@ -12,8 +12,6 @@ export const run = async () => {
 
     const mediaItems: MediaItem[] = await getAllMediaItems();
     console.log(mediaItems);
-
-    return;
     
     const model = new OpenAI({ temperature: 0 });
 
