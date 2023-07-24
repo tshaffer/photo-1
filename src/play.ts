@@ -1,6 +1,8 @@
 import { OpenAI } from "langchain/llms/openai";
 import connectDB from './config/db';
 import * as dotenv from "dotenv";
+import { MediaItem } from "./types";
+import { getAllMediaItems } from "./controllers/dbInterface";
 
 dotenv.config();
 
@@ -8,6 +10,11 @@ export const run = async () => {
 
     await connectDB();
 
+    const mediaItems: MediaItem[] = await getAllMediaItems();
+    console.log(mediaItems);
+
+    return;
+    
     const model = new OpenAI({ temperature: 0 });
 
     // list of prior prompts
