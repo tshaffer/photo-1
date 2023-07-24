@@ -1,17 +1,17 @@
 import mongoose from 'mongoose';
 
-async function connectDB() {
-// const connectDB = async () => {
-  console.log('uri is:');
-  console.log(process.env.MONGO_URI);
-  const conn = await mongoose.connect(process.env.MONGO_URI as string, {
-    useNewUrlParser: true,
-    useCreateIndex: true,
-    useFindAndModify: false,
-  });
-  mongoose.Promise = global.Promise;
+export let legacyConnection: mongoose.Connection;
+export let connection: mongoose.Connection;
 
-  console.log(`MongoDB Connected`);
+import { tsPhotoUtilsConfiguration } from './config';
+
+async function connectDB() {
+  console.log('uri is:');
+  console.log(tsPhotoUtilsConfiguration.MONGO_URI);
+  connection = await mongoose.createConnection(tsPhotoUtilsConfiguration.MONGO_URI); 
+  console.log(`MongoDB new db connected`);
+
+  mongoose.Promise = global.Promise;
 };
 
 export default connectDB;
