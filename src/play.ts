@@ -32,7 +32,7 @@ export const run = async () => {
     // '        Conditions: None'
 
     const input = `
-        The user will provide input. The input will include the following: a command to display photos; which photos to display;
+        The user will provide input. The input will include the following: a command to display photos; a specification of which photos to display;
         under what conditions the photos should be displayed.
 
         Example input: Display photos of either Sam or Joel from the years 1990 - 1992
@@ -58,13 +58,18 @@ export const run = async () => {
             Command: Display photos
             List: (Sam || Joel) && !Rachel
             Conditions: Years 1990 - 1992
-            
-        Parse the input and respond with the following format:
+        
+        If there is a specification of which photos to display, then each item in the specification must be in the photos tag list.
+        The photos tag list includes the following items: Sam, Joel, and Rachel.
+        If an item in the specification is not in the photos tag list, then immediately respond with the following:
+        Error - item not in tag list: the item that is not in the specification.
+
+        Otherwise, parse the input and respond with the following format:
         Command: command here
         List: the list of people whose photos should be displayed
         Conditions: the conditions under which the photos should be selected.
     
-        Display photos of Fred or Ethel but not Barney from the year 1993.
+        Display photos of Fred from the year 1993.
     `;
     
     const res = await model.call(input);
