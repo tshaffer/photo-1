@@ -66,10 +66,10 @@ export const run = async () => {
 
         Otherwise, parse the input and respond with the following format:
         Command: command here
-        List: the list of people whose photos should be displayed
+        List: the specification of which photos to display
         Conditions: the conditions under which the photos should be selected.
     
-        Display photos of Fred from the year 1993.
+        Display photos of Joel and Sam and Noah from the year 1993.
     `;
     
     const res = await model.call(input);
