@@ -10,29 +10,33 @@ import { StructuredOutputParser } from "langchain/output_parsers";
 
 // With a `StructuredOutputParser` we can define a schema for the output.
 const parser = StructuredOutputParser.fromNamesAndDescriptions({
-    photosToDisplayAnswer: "answer for photos to display",
-    photoDatesAnswer: "answer for the photo dates",
+    photosToDisplaySpec: "spec for the photos to display",
 });
 
 const formatInstructions = parser.getFormatInstructions();
 
 // const template = 'Answer the users question as best as possible.\n{format_instructions}\n{question}';
 const template = `
-    The user will provide input. The input will include the following: a command to display photos; which photos to display;
-    the dates for the photos.
+    The user will provide input. The input will include the following: a command to display photos; a spec for the photos to display.
+    The spec for which photos to display must includes tags (from the list of tags below) and/or a date specification.
+
+    The list of tags includes: 
+    Sam
+    Joel
+    Rachel
+    Moose
+    Bear
+    Vacations
 
     Example input: Display photos of either Sam or Joel from the years 1990 - 1992
-    The answer for photos to display is: Sam or Joel
-    The answer for the photo dates is: 1990 - 1992
-    
-    Answer the users question as best as possible. 
-    
-    {format_instructions}\n{question}
+    The spec for the photos to display is: (Sam or Joel) && dates(1990-1992)
+        
+    {format_instructions}\n{command}
 `;
 
 const prompt = new PromptTemplate({
     template,
-    inputVariables: ["question"],
+    inputVariables: ["command"],
     partialVariables: { format_instructions: formatInstructions },
 });
 
@@ -43,7 +47,7 @@ async function main() {
     const model = new OpenAI({ temperature: 0 });
 
     const input = await prompt.format({
-        question: "Display photos of either Sam or Joel from the years 1990 - 1992",
+        command: "Display photos of either Sam or Joel from the years 1990 - 1992",
     });
     const response = await model.call(input);
 
