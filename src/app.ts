@@ -11,16 +11,28 @@ async function main() {
 
     console.log('main invoked');
 
-    await connectDB();
+    // await connectDB();
 
-    const dbData: DbData = await getDbData();
-    // console.log(mediaItems);
+    // const dbData: DbData = await getDbData();
 
-    // const model = new OpenAI({ temperature: 0 });
+    const model = new OpenAI({ temperature: 0 });
 
     const input = `
   The user will provide input. The input will include the following: a command to display photos; a specification of which photos to display;
   under what conditions the photos should be displayed.
+
+  If an item in the specification is not in the photos tag list, then immediately respond with only the following:
+  Error - item not in tag list: the item that is not in the specification.
+
+  The conditions under which conditions the photos should be displayed can only include a date specification, a date range specification, tags 
+  in the tag list, or a combination of these items.
+  If the conditions under which conditions the photos should be displayed do not meet this criteria, then immedialy respond with the following:
+  Error - conditions not specified correctly.
+
+  Otherwise, parse the input and respond with the following format:
+  Command: command here
+  List: the specification of which photos to display. The specification must be a logical expression as described in the examples below.
+  Conditions: the conditions under which the photos should be selected. The conditions
 
   Example input: Display photos of either Sam or Joel from the years 1990 - 1992
   For this input, the output should be as follows:
@@ -53,24 +65,19 @@ async function main() {
       Rachel
       Moose
       Bear
+      Vacations
 
-  If an item in the specification is not in the photos tag list, then immediately respond with the following:
-  Error - item not in tag list: the item that is not in the specification.
-
-  Otherwise, parse the input and respond with the following format:
-  Command: command here
-  List: the specification of which photos to display
-  Conditions: the conditions under which the photos should be selected.
-
-  Display photos of bears and moose from our 2023 Glacier vacation.
+  Display photos of Sam and Joel on vacations.
 `;
 
-    //   const res = await model.call(input);
-    //   console.log({ res });
+    // Display photos of Sam and Joel from 1991 - 1993.
+
+    const res = await model.call(input);
+    console.log({ res });
 
     console.log('exit');
 
-    //   exit();
+    exit();
 }
 
 main();
