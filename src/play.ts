@@ -5,7 +5,8 @@ import { StructuredOutputParser } from "langchain/output_parsers";
 
 // With a `StructuredOutputParser` we can define a schema for the output.
 const parser = StructuredOutputParser.fromNamesAndDescriptions({
-    answer: "answer to the user's question",
+    cityAnswer: "answer to the user's question about the capital",
+    continentAnswer: "answer to the user's question about the continent",
 });
 
 const formatInstructions = parser.getFormatInstructions();
@@ -27,7 +28,7 @@ export const run = async () => {
     const model = new OpenAI({ temperature: 0 });
 
     const input = await prompt.format({
-        question: "What is the capital of France?",
+        question: "What is the capital of France and what continent is it in?",
     });
     const response = await model.call(input);
 
