@@ -16,9 +16,10 @@ const parser = StructuredOutputParser.fromNamesAndDescriptions({
 
 const formatInstructions = parser.getFormatInstructions();
 
+const template = 'Answer the users question as best as possible.\n{format_instructions}\n{question}';
+
 const prompt = new PromptTemplate({
-    template:
-        "Answer the users question as best as possible.\n{format_instructions}\n{question}",
+    template,
     inputVariables: ["question"],
     partialVariables: { format_instructions: formatInstructions },
 });
