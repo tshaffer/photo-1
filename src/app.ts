@@ -67,7 +67,7 @@ async function main() {
       Bear
       Vacations
 
-  Display photos of Sam and Joel on vacations.
+  Display photos of Sam and Joel on a vacation in 1992.
 `;
 
     // Display photos of Sam and Joel from 1991 - 1993.
