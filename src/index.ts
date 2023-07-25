@@ -8,6 +8,11 @@ console.log(exampleName, ...args);
 
 let runExample;
 
+console.log(__dirname);
+console.log(exampleName);
+const scriptPath = require(path.join(__dirname, exampleName));
+console.log(scriptPath);
+
 try {
   ({ run: runExample } = require(path.join(__dirname, exampleName)));
 } catch {
