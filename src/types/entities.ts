@@ -13,3 +13,12 @@ export interface MediaItem {
   gpsPosition?: string;
 }
 
+// key is Tag (string)
+export interface TagToMediaItemsLUT {
+  [key: string]: MediaItem[];
+}
+
+export interface DbData {
+  mediaItems: MediaItem[];
+  tagToMediaItemsLUT: TagToMediaItemsLUT;
+}

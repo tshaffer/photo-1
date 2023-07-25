@@ -1,7 +1,7 @@
 import * as dotenv from "dotenv";
 import connectDB from './config/db';
-import { MediaItem } from "entities";
-import { getAllMediaItems } from "./controllers";
+import { DbData, MediaItem } from "entities";
+import { getDbData } from "./controllers";
 import { exit } from "process";
 import { OpenAI } from "langchain/llms/openai";
 
@@ -9,16 +9,16 @@ dotenv.config();
 
 async function main() {
 
-  console.log('main invoked');
+    console.log('main invoked');
 
-  await connectDB();
+    await connectDB();
 
-  const mediaItems: MediaItem[] = await getAllMediaItems();
-  console.log(mediaItems);
+    const dbData: DbData = await getDbData();
+    // console.log(mediaItems);
 
-  const model = new OpenAI({ temperature: 0 });
+    // const model = new OpenAI({ temperature: 0 });
 
-  const input = `
+    const input = `
   The user will provide input. The input will include the following: a command to display photos; a specification of which photos to display;
   under what conditions the photos should be displayed.
 
@@ -65,12 +65,12 @@ async function main() {
   Display photos of bears and moose from our 2023 Glacier vacation.
 `;
 
-//   const res = await model.call(input);
-//   console.log({ res });
+    //   const res = await model.call(input);
+    //   console.log({ res });
 
-  console.log('exit');
+    console.log('exit');
 
-//   exit();
+    //   exit();
 }
 
 main();

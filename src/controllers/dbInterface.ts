@@ -1,32 +1,50 @@
-import { MediaItem } from '../types';
+import { DbData, MediaItem, TagToMediaItemsLUT } from '../types';
 import {
   getMediaitemModel,
 } from '../models';
 
-export const getAllMediaItems = async (): Promise<MediaItem[]> => {
+export const getDbData = async (): Promise<DbData> => {
 
   console.log('getAllMediaItems invoked');
 
+  const mediaItems: MediaItem[] = [];
+  const tagToMediaItemsLUT: TagToMediaItemsLUT = {};
+
+  const dbData: DbData = {
+    mediaItems,
+    tagToMediaItemsLUT,
+  };
+
   const mediaItemModel = getMediaitemModel();
 
-  const records: MediaItem[] = [];
-  // const documents: any = await (mediaItemModel as any).find().limit(10).exec();
-  // const documents: any = await (mediaItemModel as any).find().limit(10).exec();
-  // const documents: any = await (mediaItemModel as any).find( { filePath: '/Users/tedshaffer/Documents/ShafferotoBackup/newMediaItems/l/A/AEEKk932ksqu6T0MC342TOLQpoXku3LGlktjmc6aCciqnYcJLNqGeLBvu7cJ9H3as6HL9UYVbaVc8jRFM1liknJwV-bjMU89lA.JPG' }).exec();
-  // const documents: any = await (mediaItemModel as any).find( { description: '' }).exec();
-  const documents: any = await (mediaItemModel as any).find( { description: { $ne: ''} }).exec();
+  const documents: any = await (mediaItemModel as any).find({ description: { $ne: '' } }).exec();
   for (const document of documents) {
+
     const mediaItem: MediaItem = document.toObject() as MediaItem;
     mediaItem.googleId = document.googleId.toString();
-    const description = document.description.toString();
+    mediaItems.push(mediaItem);
+
+    const description: string = document.description.toString();
     if (!description.includes('best canyon around')) {
       if (description.startsWith('TedTag-')) {
-        records.push(mediaItem);
+        // mediaItem includes one or more tags
+        const tagsSpec: string = description.substring('TedTag-'.length);
+        const tags: string[] = tagsSpec.split(':');
+        if (tags.length > 0) {
+          tags.forEach((tag: string) => {
+            if (!tagToMediaItemsLUT.hasOwnProperty(tag)) {
+              tagToMediaItemsLUT[tag] = [];
+            }
+            tagToMediaItemsLUT[tag].push(mediaItem);
+          })
+        }
       }
     }
   }
-  console.log('records');
-  console.log(records);
-  return records;
+
+  console.log('dbData');
+  console.log(dbData);
+
+  return dbData;
 }
 
