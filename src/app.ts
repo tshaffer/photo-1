@@ -65,12 +65,12 @@ async function main() {
   Display photos of bears and moose from our 2023 Glacier vacation.
 `;
 
-  const res = await model.call(input);
-  console.log({ res });
+//   const res = await model.call(input);
+//   console.log({ res });
 
   console.log('exit');
 
-  exit();
+//   exit();
 }
 
 main();
