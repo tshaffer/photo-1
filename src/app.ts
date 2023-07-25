@@ -33,6 +33,9 @@ const template = `
     Example input: Display photos of either Sam and Joel from the our vacation.
     The spec for the photos to display is: (Sam and Joel) && Vacations
         
+    Example input: Display photos from our 1993 vacation.
+    The spec for the photos to display is: (Vacation) && dates(1993)
+        
     {format_instructions}\n{command}
 `;
 
@@ -49,7 +52,7 @@ async function main() {
     const model = new OpenAI({ temperature: 0 });
 
     const input = await prompt.format({
-        command: "Display photos of either Sam or Rachel or Ted from our vacation",
+        command: "Display photos from our 2021 vacation",
     });
     const response = await model.call(input);
 
