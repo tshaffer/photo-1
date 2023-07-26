@@ -19,6 +19,11 @@ const template = `
     The user will provide input. The input will include the following: a command to display photos; a spec for the photos to display.
     The spec for which photos to display must includes tags (from the list of tags below) and/or a date specification.
 
+    The format for a date specification begins with dateSpec** and ends with **. The dates are between the sets of asterisks. 
+    A range of years is specified as: dateSpec**starting year - ending year**
+    A list of years is specified as: dateSpec**year1 and year2 and year3**
+    A single year is specified as: dateSpec**year**
+
     The list of tags includes: 
     Sam
     Joel
@@ -28,13 +33,13 @@ const template = `
     Vacation
 
     Example input: Display photos of either Sam or Joel from the years 1990 - 1992
-    The spec for the photos to display is: (Sam or Joel) && dates(1990-1992)
+    The spec for the photos to display is: (Sam or Joel) && dateSpec**1990-1992**
         
     Example input: Display photos of either Sam and Joel from the our vacation.
     The spec for the photos to display is: (Sam and Joel) && Vacations
         
     Example input: Display photos from our 1993 vacation.
-    The spec for the photos to display is: (Vacation) && dates(1993)
+    The spec for the photos to display is: (Vacation) && dateSpec**1993**
         
     {format_instructions}\n{command}
 `;
@@ -52,7 +57,9 @@ async function main() {
     const model = new OpenAI({ temperature: 0 });
 
     const input = await prompt.format({
-        command: "Display photos from our 2021 vacation",
+        // command: "Display photos from our 2021 and 2023 vacations",
+        // command: "Display photos from vacations 2021-2023",                      // failed
+        command: "Display photos from vacations from the years 2021 - 2023",        // worked
     });
     const response = await model.call(input);
 
