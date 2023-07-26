@@ -59,9 +59,9 @@ async function main() {
     const model = new OpenAI({ temperature: 0 });
 
     const input = await prompt.format({
-        // command: "Display photos from our 2021 and 2023 vacations",
-        // command: "Display photos from vacations 2021-2023",                      // failed
-        command: "Display photos from vacations from the years 2021 - 2023",        // worked
+        // command: "Display photos from our 2021 and 2023 vacations",                   // worked
+        command: "Display photos from vacations 2021-2023",                             // worked
+        // command: "Display photos from vacations from the years 2021 - 2023",        // worked
     });
     const response = await model.call(input);
 
