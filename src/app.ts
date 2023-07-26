@@ -35,13 +35,13 @@ const template = `
     Return a spec for the photos to display, formatted using Reverse Polish Notation (see examples below).
     
     Example input: Display photos of either Sam or Joel from the years 1990 - 1992
-    The spec for the photos to display is: Sam Joel OR dateSpec**1990 through 1992** AND
+    The spec for the photos to display is: SamXXXXJoelXXXXORXXXXdateSpec**1990 through 1992**XXXXAND
         
     Example input: Display photos of either Sam and Joel from the our vacation.
-    The spec for the photos to display is: Sam Joel AND Vacations AND
+    The spec for the photos to display is: SamXXXXJoelXXXXANDXXXXVacationsXXXXAND
         
     Example input: Display photos from our 1993 vacation.
-    The spec for the photos to display is: Vacation dateSpec**1993** AND
+    The spec for the photos to display is: VacationXXXXdateSpec**1993**XXXXAND
         
     {format_instructions}\n{command}
 `;
