@@ -16,8 +16,8 @@ const parser = StructuredOutputParser.fromNamesAndDescriptions({
 const formatInstructions = parser.getFormatInstructions();
 
 const template = `
-    The user will provide input. The input will include the following: a command to display photos; a spec for the photos to display.
-    The spec for which photos to display must includes tags (from the list of tags below) and/or a date specification.
+    The user will provide input. The input will include the following: a command to display photos; a photos selection spec.
+    The photos selection spec must include one or more tags (from the list of tags below) and/or a date specification.
 
     The format for a date specification begins with dateSpec** and ends with **. The dates are between the sets of asterisks. 
     A range of years is specified as: dateSpec**starting year - ending year**
@@ -32,8 +32,10 @@ const template = `
     Bear
     Vacation
 
+    Return a spec for the photos to display (see examples below).
+    
     Example input: Display photos of either Sam or Joel from the years 1990 - 1992
-    The spec for the photos to display is: (Sam or Joel) && dateSpec**1990-1992**
+    The spec for the photos to display is: (Sam or Joel) && dateSpec**1990 through 1992**
         
     Example input: Display photos of either Sam and Joel from the our vacation.
     The spec for the photos to display is: (Sam and Joel) && Vacations
