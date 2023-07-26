@@ -69,7 +69,14 @@ async function main() {
 
     console.log(response);
 
-    console.log(await parser.parse(response));
+    const responseAsObject = await parser.parse(response);
+    console.log(responseAsObject);
+
+    const photosToDisplaySpecStr = responseAsObject.photosToDisplaySpec;
+
+    const tokens: string[] = photosToDisplaySpecStr.split('XXXX');
+    
+    console.log('exit');
 };
 
 main();
