@@ -65,29 +65,30 @@ async function main() {
 
     const dbData: DbData = await getDbData();
 
-    // const model = new OpenAI({ temperature: 0 });
+    const model = new OpenAI({ temperature: 0 });
 
-    // const input = await prompt.format({
-    //     // command: "Display photos from our 2021 and 2023 vacations",                   // worked
-    //     // command: "Display photos from vacations 2021-2023",                             // worked
-    //     // command: "Display photos from vacations from the years 2021 - 2023",        // worked
-    //     command: "Display photos of Joel or Lori"
-    // });
-    // const response = await model.call(input);
+    const input = await prompt.format({
+        // command: "Display photos from our 2021 and 2023 vacations",                   // worked
+        // command: "Display photos from vacations 2021-2023",                             // worked
+        // command: "Display photos from vacations from the years 2021 - 2023",        // worked
+        command: "Display photos of Joel or Lori"
+    });
+    const response = await model.call(input);
 
-    // console.log('INPUT');
-    // console.log(input);
+    console.log('INPUT');
+    console.log(input);
 
-    // console.log('RESPONSE');
-    // console.log(response);
+    console.log('RESPONSE');
+    console.log(response);
 
-    // console.log('PARSED RESPONSE');
-    // const responseAsObject = await parser.parse(response);
-    // console.log(responseAsObject);
+    console.log('PARSED RESPONSE');
+    const responseAsObject = await parser.parse(response);
+    console.log(responseAsObject);
 
-    // const matchingMediaItems: MediaItem[] = parsePhotosToDisplaySpec(dbData, responseAsObject.photosToDisplaySpec);
-
-    const matchingMediaItems: MediaItem[] = parsePhotosToDisplaySpec(dbData, 'JoelXXXXLoriXXXXOR');
+    // Test to bypass LLM
+    // const matchingMediaItems: MediaItem[] = parsePhotosToDisplaySpec(dbData, 'JoelXXXXLoriXXXXOR');
+    const matchingMediaItems: MediaItem[] = parsePhotosToDisplaySpec(dbData, responseAsObject.photosToDisplaySpec);
+    
     console.log('matchingMediaItems');
     console.log(matchingMediaItems);
 
