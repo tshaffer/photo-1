@@ -88,7 +88,7 @@ async function main() {
     // Test to bypass LLM
     // const matchingMediaItems: MediaItem[] = parsePhotosToDisplaySpec(dbData, 'JoelXXXXLoriXXXXOR');
     const matchingMediaItems: MediaItem[] = parsePhotosToDisplaySpec(dbData, responseAsObject.photosToDisplaySpec);
-    
+
     console.log('matchingMediaItems');
     console.log(matchingMediaItems);
 
@@ -132,11 +132,40 @@ const applyOrs = (tags: string[], tagToMediaItemsLUT: TagToMediaItemsLUT): Media
     return resultingMediaItems;
 }
 
+const applyAnds = (incomingMediaItems: MediaItem[], tags: string[], tagToMediaItemsLUT: TagToMediaItemsLUT): MediaItem[] => {
+
+    const resultingMediaItems: MediaItem[] = [];
+
+    for (const tag of tags) {
+
+        if (tagToMediaItemsLUT.hasOwnProperty(tag.toLowerCase())) {
+
+            // get mediaItems for this tag
+            const mediaItemsWithThisTag: MediaItem[] = tagToMediaItemsLUT[tag.toLowerCase()];
+
+            // for each mediaItem associated with each tag, perform AND with incomingMediaItems
+            for (const mediaItemWithThisTag of mediaItemsWithThisTag) {
+                // does mediaItem with this tag exist in incomingMediaItems?
+                const result = incomingMediaItems.find(({ googleId }) => googleId === mediaItemWithThisTag.googleId);
+                if (!isNil(result)) {
+                    const result = resultingMediaItems.find(({ googleId }) => googleId === mediaItemWithThisTag.googleId);
+                    if (isNil(result)) {
+                        resultingMediaItems.push(mediaItemWithThisTag);
+                    }
+                }
+            }
+
+        }
+    }
+
+    return resultingMediaItems;
+}
+
 const applyLogicalOperation = (dbData: DbData, mediaItems: MediaItem[], tags: string[], operator: string): MediaItem[] => {
 
     switch (operator.toLowerCase()) {
         case 'and':
-            return [];
+            return applyAnds(mediaItems, tags, dbData.tagToMediaItemsLUT);
         case 'or':
             return applyOrs(tags, dbData.tagToMediaItemsLUT);
         case 'not':
