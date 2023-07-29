@@ -71,7 +71,7 @@ async function main() {
         // command: "Display photos from our 2021 and 2023 vacations",                   // worked
         // command: "Display photos from vacations 2021-2023",                             // worked
         // command: "Display photos from vacations from the years 2021 - 2023",        // worked
-        command: "Display photos of Joel or Lori"
+        command: "Display photos of Joel and ooni"
     });
     const response = await model.call(input);
 
@@ -134,9 +134,11 @@ const applyOrs = (tags: string[], tagToMediaItemsLUT: TagToMediaItemsLUT): Media
 
 const applyAnds = (incomingMediaItems: MediaItem[], tags: string[], tagToMediaItemsLUT: TagToMediaItemsLUT): MediaItem[] => {
 
-    const resultingMediaItems: MediaItem[] = [];
+    let resultingMediaItems: MediaItem[] = [];
 
     for (const tag of tags) {
+
+        resultingMediaItems = [];
 
         if (tagToMediaItemsLUT.hasOwnProperty(tag.toLowerCase())) {
 
@@ -156,6 +158,9 @@ const applyAnds = (incomingMediaItems: MediaItem[], tags: string[], tagToMediaIt
             }
 
         }
+
+        incomingMediaItems = cloneDeep(resultingMediaItems);
+
     }
 
     return resultingMediaItems;
