@@ -46,6 +46,9 @@ const template = `
     Example input: Display photos from our 1993 vacation.
     The spec for the photos to display is: VacationXXXXdateSpec**1993**XXXXAND
         
+    Example input: Display photos that don't include Fred.
+    The spec for the photos to display is: FredXXXXNOT
+
     {format_instructions}\n{command}
 `;
 
@@ -71,7 +74,9 @@ async function main() {
         // command: "Display photos from our 2021 and 2023 vacations",                   // worked
         // command: "Display photos from vacations 2021-2023",                             // worked
         // command: "Display photos from vacations from the years 2021 - 2023",        // worked
-        command: "Display photos of Joel and ooni"
+        // command: "Display photos of Joel and ooni"
+        // command: "Display photos that don't include Joel"
+        command: "Display photos that include Joel"
     });
     const response = await model.call(input);
 
@@ -166,6 +171,39 @@ const applyAnds = (incomingMediaItems: MediaItem[], tags: string[], tagToMediaIt
     return resultingMediaItems;
 }
 
+// NOT operation
+// remit
+//      input parameters
+//          incomingMediaItems
+//          tag
+//      remove any incomingMediaItems that include the specified tag.
+//
+// next level of detail
+//      resultingMediaItems is empty
+//      iterate through incoming media items - if it doesn't include the tag, add it to resultingMediaItems
+const applyNot = (incomingMediaItems: MediaItem[], tag: string, tagToMediaItemsLUT: TagToMediaItemsLUT): MediaItem[] => {
+
+    // if this tag is not referenced, return immediately with all incomingMediaItems
+    if (!tagToMediaItemsLUT.hasOwnProperty(tag.toLowerCase())) {
+        return incomingMediaItems;
+    }
+
+    const resultingMediaItems: MediaItem[] = [];
+
+    // get mediaItems for this tag
+    const mediaItemsWithThisTag: MediaItem[] = tagToMediaItemsLUT[tag.toLowerCase()];
+
+    for (const mediaItem of incomingMediaItems) {
+
+        const result = mediaItemsWithThisTag.find(({ googleId }) => googleId === mediaItem.googleId);
+        if (isNil(result)) {
+            resultingMediaItems.push(mediaItem);
+        }
+
+    }
+    return resultingMediaItems;
+}
+
 const applyLogicalOperation = (dbData: DbData, mediaItems: MediaItem[], tags: string[], operator: string): MediaItem[] => {
 
     switch (operator.toLowerCase()) {
@@ -174,7 +212,7 @@ const applyLogicalOperation = (dbData: DbData, mediaItems: MediaItem[], tags: st
         case 'or':
             return applyOrs(tags, dbData.tagToMediaItemsLUT);
         case 'not':
-            return [];
+            return applyNot(mediaItems, tags[0], dbData.tagToMediaItemsLUT);
     }
 
     return [];
