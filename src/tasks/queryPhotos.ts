@@ -1,4 +1,3 @@
-import * as dotenv from "dotenv";
 import connectDB from '../config/db';
 import { DbData, MediaItem, TagToMediaItemsLUT } from "entities";
 import { getDbData } from "../controllers";
@@ -57,7 +56,6 @@ const prompt = new PromptTemplate({
 });
 
 export async function queryPhotos() {
-  dotenv.config();
 
   await connectDB();
 
